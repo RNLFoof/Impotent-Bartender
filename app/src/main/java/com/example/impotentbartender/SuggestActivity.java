@@ -62,8 +62,8 @@ public class SuggestActivity extends AppCompatActivity {
         btnGo = findViewById(R.id.btnGo);
         etAlc = findViewById(R.id.etAlc);
         etNon = findViewById(R.id.etNon);
-        allCocktails = JsonIO.load(context, "allCocktails");
-        JSONObject allIngredients = JsonIO.load(context, "allIngredients");
+        allCocktails = JsonIO.load(context, R.raw.allcocktails);
+        JSONObject allIngredients = JsonIO.load(context, R.raw.allingredients);
 
         Iterator<String> ks = allIngredients.keys();
         while (ks.hasNext())
