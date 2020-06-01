@@ -13,6 +13,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Iterator;
 
 public class JsonIO {
@@ -30,9 +32,14 @@ public class JsonIO {
                 sb.append(line);
             }
             Log.d("fuck13", "1");
+            fis.close();
             return new JSONObject(sb.toString());
         } catch (FileNotFoundException fileNotFound) {
             Log.d("fuck14", "2");
+            StringWriter sw = new StringWriter();
+            fileNotFound.printStackTrace(new PrintWriter(sw));
+            String exceptionAsString = sw.toString();
+            Log.d("fuck", exceptionAsString);
             return new JSONObject();
         } catch (IOException ioException) {
             Log.d("fuck15", "3");

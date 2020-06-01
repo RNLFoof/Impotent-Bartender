@@ -61,30 +61,13 @@ public class PossibleActivity extends AppCompatActivity {
 
     void populate()
     {
-        try {
-            llPossibleDrinks.removeAllViews();
-            for (String k: keys)
-            {
-                TextView tvItem = new TextView(context);
-                JSONObject cock = allCocktails.getJSONObject(k);
-
-                tvItem.setText(k);
-                tvItem.setTextSize(30);
-
-                tvItem.setOnClickListener(new View.OnClickListener() {
-                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(context, CocktailInfoActivity.class);
-                        intent.putExtra("json", cock.toString());
-                        startActivity(intent);
-                    }
-                });
-
-                llPossibleDrinks.addView(tvItem);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        int n = 0;
+        llPossibleDrinks.removeAllViews();
+        for (String k: keys)
+        {
+            Log.d("fuck", k);
+            Cocktail ttt = new Cocktail(context, k, allCocktails);
+            llPossibleDrinks.addView( ttt.getPreview());
         }
     }
 }

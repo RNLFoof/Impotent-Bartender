@@ -13,6 +13,8 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 public class CocktailInfoActivity extends AppCompatActivity {
 
     TextView tvName;
@@ -48,40 +50,21 @@ public class CocktailInfoActivity extends AppCompatActivity {
             }
         });
 
-        Log.d("fuck", "1");
-        try
-        {
-            String jsonString = getIntent().getStringExtra("json");
-            JSONObject json = new JSONObject(jsonString);
+        String name = getIntent().getStringExtra("name");
+        Cocktail cock = new Cocktail(context, name);
 
-            tvName.setText(json.getString("strDrink"));
-            tvDesc.setText("lol");
-            String s1 = "";
-            String s2 = "";
-            for (int i = 1; i <= 15; i++)
-            {
-                if (json.getString("strIngredient"+i) != null)
-                {
-                    try
-                    {
-                        s1 += json.getString("strIngredient"+i) + "\n";
-                        s2 += json.getString("strMeasure"+i).toString() + "\n";
-                    }
-                    catch (JSONException e)
-                    {
-                        Log.d("fuck", e.getMessage());
-                    }
-                }
-                tvIng.setText(s1.trim());
-                tvQuantity.setText(s2.trim());
-            }
-            tvInstructions.setText(json.getString("strInstructions"));
-            tvJson.setText(jsonString);
-        }
-        catch (JSONException e)
+        tvName.setText(cock.name);
+        tvDesc.setText("lol");
+        String s1 = "";
+        String s2 = "";
+        for (HashMap<String, String> ing: cock.ingredients)
         {
-            Log.d("fuck", e.getMessage());
+            s1 += ing.get("ingredient")+"\n";
+            s2 += ing.get("quantity")+" "+ing.get("unit")+"\n";
         }
+        tvIng.setText(s1.trim());
+        tvQuantity.setText(s2.trim());
+        tvInstructions.setText(cock.instructions);
         Log.d("fuck", "2");
 
     }
