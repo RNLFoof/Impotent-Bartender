@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import org.json.JSONArray;
@@ -89,6 +90,7 @@ public class Cocktail
         LinearLayout ret = new LinearLayout(context);
         ret.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(600, 800);
+        ret.setPadding(10, 10, 10, 10);
         ret.setLayoutParams(layoutParams);
 
         GradientDrawable border = new GradientDrawable();
@@ -109,6 +111,7 @@ public class Cocktail
         int resID = context.getResources().getIdentifier(("drinkimg_"+name.toLowerCase().replaceAll("[^a-z0-9]","_"))+"_small" , "drawable", context.getPackageName());
         LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(500, 500);
         ivPic.setLayoutParams(layoutParams2);
+        ivPic.setImageResource(resID);
         ret.addView(ivPic);
 
         TextView tvIng = new TextView(context);
@@ -132,24 +135,24 @@ public class Cocktail
             }
         });
 
-        Handler handler = new Handler();
-        int delay = 5000; //milliseconds
-
-        handler.postDelayed(new Runnable(){
-            public void run(){
-                if (ivPic.getVisibility() != View.GONE)
-                {
-                    ivPic.setImageResource(resID);
-                    Log.d("fuck", "nah");
-                }
-                else
-                {
-                    Log.d("fuck", "yeah");
-                    ivPic.setImageResource(0);
-                }
-                handler.postDelayed(this, delay);
-            }
-        }, delay);
+//        Handler handler = new Handler();
+//        int delay = 5000; //milliseconds
+//
+//        handler.postDelayed(new Runnable(){
+//            public void run(){
+//                if (ivPic.getVisibility() != View.GONE)
+//                {
+//                    ivPic.setImageResource(resID);
+//                    Log.d("fuck", "nah");
+//                }
+//                else
+//                {
+//                    Log.d("fuck", "yeah");
+//                    ivPic.setImageResource(0);
+//                }
+//                handler.postDelayed(this, delay);
+//            }
+//        }, delay);
 
         return ret;
     }
@@ -166,5 +169,15 @@ public class Cocktail
             ret.add(new Cocktail(context, k, allCocktails));
         }
         return ret;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj)
+    {
+        if (obj instanceof Cocktail)
+        {
+            return this.name.equals(((Cocktail)obj).name);
+        }
+        return false;
     }
 }

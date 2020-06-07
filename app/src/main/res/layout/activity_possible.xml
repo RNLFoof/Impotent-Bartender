@@ -14,10 +14,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/llPossibleDrinks"
-            android:layout_width="match_parent"
+        <org.apmem.tools.layouts.FlowLayout
+            android:id="@+id/flPossibleDrinks"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:gravity="center_horizontal"></org.apmem.tools.layouts.FlowLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

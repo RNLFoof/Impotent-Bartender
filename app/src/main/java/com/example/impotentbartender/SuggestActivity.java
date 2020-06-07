@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.apmem.tools.layouts.FlowLayout;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,7 +39,7 @@ public class SuggestActivity extends AppCompatActivity {
     Button btnGo;
     ArrayList<HashSet<String>> suggestions;
     String[] owned;
-    JSONObject allCocktails;
+    ArrayList<Cocktail> allCocktails;
     TextView progress;
     EditText etAlc;
     EditText etNon;
@@ -62,7 +63,7 @@ public class SuggestActivity extends AppCompatActivity {
         btnGo = findViewById(R.id.btnGo);
         etAlc = findViewById(R.id.etAlc);
         etNon = findViewById(R.id.etNon);
-        allCocktails = JsonIO.load(context, R.raw.allcocktails);
+        allCocktails = Cocktail.getAllCocktails(context);
         JSONObject allIngredients = JsonIO.load(context, R.raw.allingredients);
 
         Iterator<String> ks = allIngredients.keys();
@@ -110,6 +111,7 @@ public class SuggestActivity extends AppCompatActivity {
     {
         llSuggestions.removeAllViews();
         Log.d("fuck1", suggestions.toString());
+        ArrayList<Cocktail> alreadyPossible = PossibleDrinks.getPossibleDrinks(context, owned);
 
         int n = 0;
         for (HashSet<String> sug: sortByPotential(context, suggestions, owned))
@@ -123,9 +125,21 @@ public class SuggestActivity extends AppCompatActivity {
 
             // New drinks
             tvItem = new TextView(context);
-            tvItem.setText(PossibleDrinks.getPossibleDrinks(context, concatenate(owned, sug.toArray(new String[sug.size()])), allCocktails).toString());
-            tvItem.setTextSize(20);
-            llSuggestions.addView(tvItem);
+            StringBuilder s = new StringBuilder();
+            FlowLayout flPreviews = new FlowLayout(context);
+            for (Cocktail x: PossibleDrinks.getPossibleDrinks(context, concatenate(owned, sug.toArray(new String[sug.size()])), allCocktails))
+            {
+                if (!alreadyPossible.contains(x))
+                {
+                    //s.append(x.name);
+                    //s.append(", ");
+                    flPreviews.addView(x.getPreview());
+                }
+            }
+            //tvItem.setText(s);
+            //tvItem.setTextSize(20);
+            //llSuggestions.addView(tvItem);
+            llSuggestions.addView(flPreviews);
 
             if (n++ > 50)
             {

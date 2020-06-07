@@ -2,6 +2,7 @@ package com.example.impotentbartender;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.apmem.tools.layouts.FlowLayout;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,8 +23,8 @@ import java.util.Iterator;
 
 public class PossibleActivity extends AppCompatActivity {
 
-    LinearLayout llPossibleDrinks;
-    ArrayList<String> keys;
+    FlowLayout flPossibleDrinks;
+    ArrayList<Cocktail> keys;
     JSONObject allCocktails;
     Context context;
     JSONObject owned;
@@ -36,21 +38,24 @@ public class PossibleActivity extends AppCompatActivity {
 
         allCocktails = JsonIO.load(context, R.raw.allcocktails);
 
-        llPossibleDrinks = findViewById(R.id.llPossibleDrinks);
+        flPossibleDrinks = findViewById(R.id.flPossibleDrinks);
 
         owned = JsonIO.load(context, "owned");
-        try {
+        try
+        {
             if (owned.opt("list") ==  null)
             {
                 owned.put("list", new JSONArray());
             }
-        } catch (JSONException e) {
+        }
+        catch (JSONException e)
+        {
             e.printStackTrace();
         }
 
         try
         {
-            keys = PossibleDrinks.getPossibleDrinks(context, PossibleDrinks.jsonListToStringArray(owned.getJSONArray("list")), allCocktails);
+            keys = PossibleDrinks.getPossibleDrinks(context, PossibleDrinks.jsonListToStringArray(owned.getJSONArray("list")), Cocktail.getAllCocktails(context));
         }
         catch (JSONException e)
         {
@@ -61,13 +66,10 @@ public class PossibleActivity extends AppCompatActivity {
 
     void populate()
     {
-        int n = 0;
-        llPossibleDrinks.removeAllViews();
-        for (String k: keys)
+        flPossibleDrinks.removeAllViews();
+        for (Cocktail cock: keys)
         {
-            Log.d("fuck", k);
-            Cocktail ttt = new Cocktail(context, k, allCocktails);
-            llPossibleDrinks.addView( ttt.getPreview());
+            flPossibleDrinks.addView( cock.getPreview());
         }
     }
 }

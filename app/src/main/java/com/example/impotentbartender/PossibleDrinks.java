@@ -13,47 +13,37 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class PossibleDrinks {
     @RequiresApi(api = Build.VERSION_CODES.N)
-    static ArrayList<String> getPossibleDrinks(Context context, String[] owned)
+    static ArrayList<Cocktail> getPossibleDrinks(Context context, String[] owned)
     {
-        JSONObject allCocktails = JsonIO.load(context, "allCocktails");
-        return getPossibleDrinks(context, owned, allCocktails);
+        return getPossibleDrinks(context, owned, Cocktail.getAllCocktails(context));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    static ArrayList<String> getPossibleDrinks(Context context, String[] owned, JSONObject allCocktails)
+    static ArrayList<Cocktail> getPossibleDrinks(Context context, String[] owned, ArrayList<Cocktail> allCocktails)
     {
-        ArrayList<String> keys = new ArrayList<>();
-        Iterator<String> ks = allCocktails.keys();
-        while (ks.hasNext())
+        ArrayList<Cocktail> keys = new ArrayList<>();
+        for (Cocktail cock: allCocktails)
         {
-            String k = ks.next();
             boolean add = true;
-            for (int i=1; i<=15; i++)
+            for (HashMap<String, String> ing: cock.ingredients)
             {
-                try
+                if (JSONArrayPos(owned, ing.get("ingredient"))==-1)
                 {
-                    String ing = allCocktails.getJSONObject(k).getString("strIngredient" + i);
-                    if (ing.toString() != "null" && JSONArrayPos(owned, ing)==-1)
-                    {
-                        add = false;
-                        break;
-                    }
-                }
-                catch (JSONException e)
-                {
-                    Log.d("fuck", "if you're reading this, something is very very wrong");
+                    add = false;
+                    break;
                 }
             }
             if (add)
             {
-                keys.add(k);
+                keys.add(cock);
             }
         }
-        keys.sort(String::compareToIgnoreCase);
+        keys.sort((Cocktail c1, Cocktail c2) -> c1.name.compareTo(c2.name));
         return keys;
     }
 
