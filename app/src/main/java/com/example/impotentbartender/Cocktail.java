@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
+import org.apmem.tools.layouts.FlowLayout;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +33,7 @@ public class Cocktail
     String source;
     ArrayList<String> optional;
     ArrayList<HashMap<String, String>> ingredients;
+    LinearLayout preview;
 
     public Cocktail(Context context, String name)
     {
@@ -153,6 +155,8 @@ public class Cocktail
 //                handler.postDelayed(this, delay);
 //            }
 //        }, delay);
+
+        preview = ret;
 
         return ret;
     }
