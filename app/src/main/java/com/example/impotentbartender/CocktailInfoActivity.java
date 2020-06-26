@@ -50,8 +50,8 @@ public class CocktailInfoActivity extends AppCompatActivity {
             }
         });
 
-        String name = getIntent().getStringExtra("name");
-        Cocktail cock = new Cocktail(context, name);
+        int index = getIntent().getIntExtra("index", 0);
+        Cocktail cock = new Cocktail(context, index);
 
         tvName.setText(cock.name);
         tvDesc.setText("lol");

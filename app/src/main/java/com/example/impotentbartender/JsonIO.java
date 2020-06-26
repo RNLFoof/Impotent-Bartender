@@ -3,6 +3,7 @@ package com.example.impotentbartender;
 import android.content.Context;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -72,6 +73,31 @@ public class JsonIO {
         } catch (JSONException e) {
             Log.d("fuck16", "4");
             return new JSONObject();
+        }
+    }
+
+    public static JSONArray loadArray(Context context, int resource)
+    {
+        try {
+            BufferedInputStream fis = new BufferedInputStream(context.getResources().openRawResource(resource));
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader bufferedReader = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                sb.append(line);
+            }
+            Log.d("fuck13", "1");
+            return new JSONArray(sb.toString());
+        } catch (FileNotFoundException fileNotFound) {
+            Log.d("fuck14", "2");
+            return new JSONArray();
+        } catch (IOException ioException) {
+            Log.d("fuck15", "3");
+            return new JSONArray();
+        } catch (JSONException e) {
+            Log.d("fuck16", "4");
+            return new JSONArray();
         }
     }
 

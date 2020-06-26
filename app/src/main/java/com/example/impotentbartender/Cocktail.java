@@ -34,24 +34,26 @@ public class Cocktail
     ArrayList<String> optional;
     ArrayList<HashMap<String, String>> ingredients;
     LinearLayout preview;
+    int index;
 
-    public Cocktail(Context context, String name)
+    public Cocktail(Context context, int index)
     {
-        IMissPython(context, name, JsonIO.load(context, R.raw.allcocktails));
+        IMissPython(context, index, JsonIO.loadArray(context, R.raw.allcocktails));
     }
 
-    public Cocktail(Context context, String name, JSONObject allCocktails)
+    public Cocktail(Context context, int index, JSONArray allCocktails)
     {
-        IMissPython(context, name, allCocktails);
+        IMissPython(context, index, allCocktails);
     }
 
-    private void IMissPython(Context context, String name, JSONObject allCocktails)
+    private void IMissPython(Context context, int index, JSONArray allCocktails)
     {
         this.context = context;
         try
         {
-            JSONObject current = allCocktails.getJSONObject(name);
-            this.name = name;
+            JSONObject current = allCocktails.getJSONObject(index);
+            this.name = current.getString("name");;
+            this.index = index;
             this.instructions = current.getString("instructions");
             this.source = current.getString("source");
 
@@ -132,7 +134,7 @@ public class Cocktail
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, CocktailInfoActivity.class);
-                intent.putExtra("name", name);
+                intent.putExtra("index", index);
                 context.startActivity(intent);
             }
         });
@@ -164,13 +166,10 @@ public class Cocktail
     public static ArrayList<Cocktail> getAllCocktails(Context context)
     {
         ArrayList<Cocktail> ret = new ArrayList<>();
-        JSONObject allCocktails = JsonIO.load(context, R.raw.allcocktails);
-        Iterator<String> keys = allCocktails.keys();
-        while (keys.hasNext())
+        JSONArray allCocktails = JsonIO.loadArray(context, R.raw.allcocktails);
+        for (int x = 0; x < allCocktails.length();  x++)
         {
-            String k = keys.next();
-            Log.d("fuck", k);
-            ret.add(new Cocktail(context, k, allCocktails));
+            ret.add(new Cocktail(context, x, allCocktails));
         }
         return ret;
     }
