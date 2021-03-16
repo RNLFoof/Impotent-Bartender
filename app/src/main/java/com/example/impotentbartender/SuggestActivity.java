@@ -224,6 +224,7 @@ public class SuggestActivity extends AppCompatActivity {
                     runOnUiThread(new Thread(() -> updateProgress()));
                 }
                 runOnUiThread(new Thread(() -> updateProgress(true)));
+                Log.d("fuck6dfdfdfdfdfdf", "c");
                 sets=new ArrayList<>(sortByPotential(context, workingsets, owned).subList(0,30));
                 Log.d("fuck6", "c");
 
@@ -259,11 +260,14 @@ public class SuggestActivity extends AppCompatActivity {
     public ArrayList<HashSet<String>> sortByPotential(Context context, ArrayList<HashSet<String>> in, String[] owned)
     {
         HashMap<String, Integer> d = new HashMap<>();
+        HashSet<String> ownedset = new HashSet<>(Arrays.asList(owned));
         for(HashSet<String> x: in)
         {
+            HashSet<String> working = (HashSet<String>) x.clone();
+            working.addAll(ownedset);
+
             d.put(x.toString(),
-                    PossibleDrinks.getPossibleDrinks(context,
-                            concatenate(owned, x.toArray(new String[x.size()])), allCocktails)
+                    PossibleDrinks.getPossibleDrinks(context, working, allCocktails)
                             .size() );
         }
 

@@ -13,8 +13,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 public class PossibleDrinks {
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -26,24 +29,36 @@ public class PossibleDrinks {
     @RequiresApi(api = Build.VERSION_CODES.N)
     static ArrayList<Cocktail> getPossibleDrinks(Context context, String[] owned, ArrayList<Cocktail> allCocktails)
     {
+        return getPossibleDrinks(context, new HashSet<>(Arrays.asList(owned)), allCocktails);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    static ArrayList<Cocktail> getPossibleDrinks(Context context, HashSet<String> owned, ArrayList<Cocktail> allCocktails)
+    {
         ArrayList<Cocktail> keys = new ArrayList<>();
         for (Cocktail cock: allCocktails)
         {
-            boolean add = true;
-            for (HashMap<String, String> ing: cock.ingredients)
-            {
-                if (JSONArrayPos(owned, ing.get("ingredient"))==-1)
-                {
-                    add = false;
-                    break;
-                }
-            }
-            if (add)
+            HashSet<String> working = (HashSet<String>) cock.ingredientset.clone();
+            working.removeAll(owned);
+            if (working.size() == 0)
             {
                 keys.add(cock);
             }
+//            boolean add = true;
+//            for (HashMap<String, String> ing: cock.ingredients)
+//            {
+//                if (JSONArrayPos(owned, ing.get("ingredient"))==-1)
+//                {
+//                    add = false;
+//                    break;
+//                }
+//            }
+//            if (add)
+//            {
+//                keys.add(cock);
+//            }
         }
-        keys.sort((Cocktail c1, Cocktail c2) -> c1.name.compareTo(c2.name));
+        // keys.sort((Cocktail c1, Cocktail c2) -> c1.name.compareTo(c2.name));
         return keys;
     }
 

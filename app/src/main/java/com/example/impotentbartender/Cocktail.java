@@ -23,6 +23,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 
 public class Cocktail
@@ -33,6 +34,7 @@ public class Cocktail
     String source;
     ArrayList<String> optional;
     ArrayList<HashMap<String, String>> ingredients;
+    HashSet<String> ingredientset;
     LinearLayout preview;
     int index;
 
@@ -68,6 +70,7 @@ public class Cocktail
             }
 
             ingredients = new ArrayList<>();
+            ingredientset = new HashSet<>();
             JSONArray ingredientsjson = current.getJSONArray("ingredients");
             for (int i=0; i<ingredientsjson.length(); i++)
             {
@@ -76,6 +79,7 @@ public class Cocktail
                 hm.put("quantity", ingredientsjson.getJSONObject(i).getString("quantity"));
                 hm.put("unit", ingredientsjson.getJSONObject(i).getString("unit"));
                 ingredients.add(hm);
+                ingredientset.add(ingredientsjson.getJSONObject(i).getString("ingredient"));
             }
         }
         catch (JSONException e) {
@@ -93,7 +97,7 @@ public class Cocktail
     {
         LinearLayout ret = new LinearLayout(context);
         ret.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(600, 800);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(600, 1000);
         ret.setPadding(10, 10, 10, 10);
         ret.setLayoutParams(layoutParams);
 
@@ -108,7 +112,7 @@ public class Cocktail
 
         TextView tvName = new TextView(context);
         tvName.setText(name);
-        tvName.setTextSize(35f);
+        tvName.setTextSize(30f);
         ret.addView(tvName);
 
         ImageView ivPic = new ImageView(context);
