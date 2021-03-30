@@ -187,4 +187,34 @@ public class Cocktail
         }
         return false;
     }
+
+    public boolean matchesSearch(String search)
+    {
+        String[] searches = search.split(";");
+        int matches = 0;
+
+        for (String x: searches)
+        {
+            boolean matched = false;
+            if (this.name.toLowerCase().contains(x.toLowerCase()))
+            {
+                matched = true;
+            }
+            else
+            {
+                for (HashMap<String, String> ing: this.ingredients)
+                {
+                    if (ing.get("ingredient").toLowerCase().contains(x.toLowerCase()))
+                    {
+                        matched = true;
+                    }
+                }
+            }
+            if (matched)
+            {
+                matches++;
+            }
+        }
+        return (matches == searches.length);
+    }
 }
