@@ -7,46 +7,101 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <Button
+                android:id="@+id/btnOwned"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="🏠 Owned Ingredients" />
+
+            <Button
+                android:id="@+id/btnOwnedHelp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="?" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <Button
+                android:id="@+id/btnSuggest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="🛒 Optimize New Ingredients" />
+
+            <Button
+                android:id="@+id/btnSuggestHelp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="?" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <Button
+                android:id="@+id/btnPossible"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="🍸 Currently Possible Drinks" />
+
+            <Button
+                android:id="@+id/btnPossibleHelp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="?" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <Button
+                android:id="@+id/btnJsonList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="💻 JSON List" />
+
+            <Button
+                android:id="@+id/btnJsonListHelp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="?" />
+        </TableRow>
+    </TableLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/btnOwned"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Owned Ingredients" />
-
-        <Button
-            android:id="@+id/btnPossible"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Currently Possible Drinks" />
-
-        <Button
-            android:id="@+id/btnSuggest"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Optimize New Ingredients" />
-
-        <Button
             android:id="@+id/btnRaters"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Rating Profiles" />
+            android:text="Rating Profiles"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btnUpdate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Update Database" />
-
-        <Button
-            android:id="@+id/btnJsonList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="JSON List" />
+            android:text="Update Database"
+            android:visibility="gone" />
 
         <RatingBar
             android:id="@+id/ratingBar"
@@ -54,7 +109,8 @@
             android:layout_height="wrap_content"
             android:max="5"
             android:numStars="5"
-            android:stepSize="0.5" />
+            android:stepSize="0.5"
+            android:visibility="gone" />
 
     </LinearLayout>
 

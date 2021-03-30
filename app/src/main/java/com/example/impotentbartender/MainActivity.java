@@ -1,5 +1,6 @@
 package com.example.impotentbartender;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -18,6 +19,11 @@ public class MainActivity extends AppCompatActivity {
     Button btnSuggest;
     Button btnRaters;
 
+    Button btnOwnedHelp;
+    Button btnJsonListHelp;
+    Button btnPossibleHelp;
+    Button btnSuggestHelp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +36,11 @@ public class MainActivity extends AppCompatActivity {
         btnPossible = (Button)findViewById(R.id.btnPossible);
         btnSuggest = (Button)findViewById(R.id.btnSuggest);
         btnRaters = (Button)findViewById(R.id.btnRaters);
+
+        btnOwnedHelp = (Button)findViewById(R.id.btnOwnedHelp);
+        btnJsonListHelp = (Button)findViewById(R.id.btnJsonListHelp);
+        btnPossibleHelp = (Button)findViewById(R.id.btnPossibleHelp);
+        btnSuggestHelp = (Button)findViewById(R.id.btnSuggestHelp);
 
         btnOwned.setOnClickListener(new View.OnClickListener()
         {
@@ -98,6 +109,56 @@ public class MainActivity extends AppCompatActivity {
             {
                 Intent intent = new Intent(context, RatersActivity.class);
                 startActivity(intent);
+            }
+        });
+
+
+
+        btnOwnedHelp.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("Red things you don't have, green things you do. Tap to toggle. The icon on the left indicates if it's alcoholic or not. The number on the right indicates how many cocktails this ingredient appears in.");
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
+        btnSuggestHelp.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("\"Alc\" and \"Non\" are alcoholic and non-alcoholic ingredients respectively. The filter uses regex and counts if it matches the name of the drink or any of the ingredients. Use semicolons to separate multiple regular expressions that must all be matched.");
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
+        btnPossibleHelp.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("Can be sorted by name, number of ingredients (complexity), and shuffled. The search uses regex and counts if it matches the name of the drink or any of the ingredients. Use semicolons to separate multiple regular expressions that must all be matched.");
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
+        btnJsonListHelp.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("For if you need to edit the save data directly for some reason. I'm pretty sure whatever text editor you use is gonna need root access. Die");
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
     }
