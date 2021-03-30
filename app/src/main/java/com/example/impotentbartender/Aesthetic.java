@@ -20,7 +20,7 @@ public class Aesthetic {
             {
                 icon = "❓";
             }
-            return icon+" "+json.getString("strIngredient");
+            return icon+" "+json.getString("strIngredient") + " (" + json.getInt("useCount") + ")";
         }
         catch (JSONException e)
         {
