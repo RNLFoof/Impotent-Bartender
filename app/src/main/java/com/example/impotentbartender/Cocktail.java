@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -115,12 +116,25 @@ public class Cocktail
         tvName.setTextSize(30f);
         ret.addView(tvName);
 
+        //Both images
+        FrameLayout flPics = new FrameLayout(context);
+        flPics.setLayoutParams(new LinearLayout.LayoutParams(500, 500));
+        ret.addView(flPics);
+        // Drink image
         ImageView ivPic = new ImageView(context);
         int resID = context.getResources().getIdentifier(("drinkimg_"+name.toLowerCase().replaceAll("[^a-z0-9]","_"))+"_small" , "drawable", context.getPackageName());
         LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(500, 500);
         ivPic.setLayoutParams(layoutParams2);
         ivPic.setImageResource(resID);
-        ret.addView(ivPic);
+        flPics.addView(ivPic);
+
+        // Source image
+        ImageView ivSource = new ImageView(context);
+        resID = context.getResources().getIdentifier("source_"+source.toLowerCase().replaceAll("[^a-z0-9]","_"), "drawable", context.getPackageName());
+        LinearLayout.LayoutParams layoutParams3 = new LinearLayout.LayoutParams(75, 75);
+        ivSource.setLayoutParams(layoutParams3);
+        ivSource.setImageResource(resID);
+        flPics.addView(ivSource);
 
         TextView tvIng = new TextView(context);
         StringBuilder sb = new StringBuilder();
