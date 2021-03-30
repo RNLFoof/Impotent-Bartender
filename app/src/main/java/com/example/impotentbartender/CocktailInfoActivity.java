@@ -22,7 +22,7 @@ public class CocktailInfoActivity extends AppCompatActivity {
     TextView tvIng;
     TextView tvQuantity;
     TextView tvInstructions;
-    TextView tvJson;
+    TextView tvSource;
     Button btnAddRatings;
     Context context;
 
@@ -36,7 +36,7 @@ public class CocktailInfoActivity extends AppCompatActivity {
         tvIng = findViewById(R.id.tvIng);
         tvQuantity = findViewById(R.id.tvQuantity);
         tvInstructions = findViewById(R.id.tvInstructions);
-        tvJson = findViewById(R.id.tvJson);
+        tvSource = findViewById(R.id.tvSource);
         btnAddRatings = findViewById(R.id.btnAddRatings);
         context = this;
 
@@ -65,6 +65,23 @@ public class CocktailInfoActivity extends AppCompatActivity {
         tvIng.setText(s1.trim());
         tvQuantity.setText(s2.trim());
         tvInstructions.setText(cock.instructions);
+
+        String source = "From "+cock.source+".\n";
+        switch(cock.source) {
+            case "TheCocktailDB":
+                source += "Anybody can add to the database and it shows. Quality varies wildly, but there's some good stuff in there. Also, it uses powdered sugar instead of simple syrup like 99% of the time for some reason, so swap those in your head.";
+                break;
+            case "Reddit":
+                source += "These are entered manually so they should be fine";
+                break;
+            case "Van Gogh":
+                source += "Taken from an SQLite file with 10,000+ cocktails on it. Has some really tasty stuff, including stuff you wouldn't think would be good (orange vodka and toasted marshmallow syrup), but like, it was made to sell vodka, and there's ten freaking thousand recipes, so be at least a little wary. Also, has a few that are glitched.";
+                break;
+            default:
+                source += "I fucked up, there should be a more specific comment here.";
+        }
+        tvSource.setText(source);
+
         Log.d("fuck", "2");
 
     }
