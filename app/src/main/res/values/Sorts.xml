@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sorts_array">
+        <item>Name</item>
+        <item>Complexity</item>
+        <item>Random</item>
+    </string-array>
+</resources>

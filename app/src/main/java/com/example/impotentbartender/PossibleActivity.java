@@ -12,8 +12,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.apmem.tools.layouts.FlowLayout;
@@ -22,17 +26,26 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class PossibleActivity extends AppCompatActivity {
+public class PossibleActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     FlowLayout flPossibleDrinks;
     EditText etSearch;
+    Spinner spSorts;
+    TextView tvPage;
+    SeekBar sbPage;
+    Button btnPageUp;
+    Button btnPageDown;
     ArrayList<Cocktail> shownCocktails;
     JSONObject allCocktails;
     Context context;
     JSONObject owned;
+
+    int itemsPerPage = 50;
+    int onPage = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -45,6 +58,13 @@ public class PossibleActivity extends AppCompatActivity {
 
         flPossibleDrinks = findViewById(R.id.flPossibleDrinks);
         etSearch = findViewById(R.id.etSearch);
+        spSorts = findViewById(R.id.spSorts);
+        tvPage = findViewById(R.id.tvPage);
+        sbPage = findViewById(R.id.sbPage);
+        btnPageUp = findViewById(R.id.btnPageUp);
+        btnPageDown = findViewById(R.id.btnPageDown);
+
+        spSorts.setOnItemSelectedListener(this);
 
         owned = JsonIO.load(context, "owned");
         try
@@ -73,24 +93,8 @@ public class PossibleActivity extends AppCompatActivity {
 
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
-                for (Cocktail cock: shownCocktails)
-                {
-                    cock.preview.setVisibility(View.GONE);
-                    if (cock.name.toLowerCase().contains(etSearch.getText().toString().toLowerCase()))
-                    {
-                        cock.preview.setVisibility(View.VISIBLE);
-                    }
-                    else
-                    {
-                        for (HashMap<String, String> ing: cock.ingredients)
-                        {
-                            if (ing.get("ingredient").toLowerCase().contains(etSearch.getText().toString().toLowerCase()))
-                            {
-                                cock.preview.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    }
-                }
+                sbPage.setProgress(0, true);
+                populate();
             }
 
 
@@ -104,14 +108,82 @@ public class PossibleActivity extends AppCompatActivity {
 
             }
         });
-    }
+
+        sbPage.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                onPage = progress;
+                tvPage.setText("Page " + String.format("%-2d", progress+1));
+                populate();
+            };
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            };
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            };
+        });
+
+        btnPageUp.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                sbPage.setProgress(sbPage.getProgress()+1, true);
+                populate();
+            }
+        });
+
+        btnPageDown.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                sbPage.setProgress(sbPage.getProgress()-1, true);
+                populate();
+            }
+        });
+    };
 
     void populate()
     {
+        int n = 0;
         flPossibleDrinks.removeAllViews();
         for (Cocktail cock: shownCocktails)
         {
-            flPossibleDrinks.addView( cock.getPreview());
+            if (cock.matchesSearch(etSearch.getText().toString())) {
+                if (Math.floor(n / itemsPerPage) == onPage) {
+                    flPossibleDrinks.addView(cock.getPreview());
+                };
+                n += 1;
+            }
         }
+        sbPage.setMax((int) Math.floor(n / itemsPerPage));
+    }
+
+    //Performing action onItemSelected and onNothing selected
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View arg1, int pos, long id) {
+        if (parent.getItemAtPosition(pos).toString().equals("Name"))
+        {
+            Collections.sort(shownCocktails, (a, b) -> a.name.compareTo(b.name));
+        }
+        else if (parent.getItemAtPosition(pos).toString().equals("Complexity"))
+        {
+            Collections.sort(shownCocktails, (a, b) -> Integer.compare(b.ingredients.size(), a.ingredients.size()));
+        }
+        else if (parent.getItemAtPosition(pos).toString().equals("Random"))
+        {
+            Collections.shuffle(shownCocktails);
+        }
+        populate();
+    }
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+        // TODO Auto-generated method stub
     }
 }
