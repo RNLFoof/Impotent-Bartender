@@ -253,6 +253,10 @@ public class SuggestActivity extends AppCompatActivity {
             ArrayList // List of ing cock tuples
                     <Pair<HashSet<String>, HashSet<Integer> // Tuple of ng, cock
                             >> toSort = new ArrayList<>();
+
+            HashMap<Integer, ArrayList // List of ing cock tuples
+                    <Pair<HashSet<String>, HashSet<Integer> // Tuple of ng, cock
+                            >>> toSortMap = new HashMap<>();
             for (int n=0; n < length_all; n++)
             {
                 setProgressString(String.format("Sorting %d/%d...", n+1, length_all));
@@ -274,57 +278,69 @@ public class SuggestActivity extends AppCompatActivity {
 //                {
 //                    Log.d("8888888888888", x.toString());
 //                }
+                if (toSort.size()> 50) {
+                    toSort.subList(50, toSort.size()).clear();
+                };
+                toSortMap.put(n+1, toSort);
 
-
+                int totalcount = 0;
                 if (length_all != n+1)
                 {
                     setNewPreviousProgress();
-                    for (int nn=0; nn < toSort.size() && nn < 50; nn++)
+                    for (int comparingtolayer=1; comparingtolayer<=n+1; comparingtolayer++)
                     {
-                        setProgressString(String.format("Trickling up %d/50...", nn+1));
-                        for (int nnn=nn; nnn < toSort.size() && nnn < 100; nnn++)
+                        if (comparingtolayer != 1 && comparingtolayer != 2 && comparingtolayer != n+1)
                         {
-                            Log.d("7468645845", String.format("Trickling up %d/%d...", nn, nnn));
-                            Pair<HashSet<String>, HashSet<Integer>> working = new Pair<>(new HashSet<>(), new HashSet<>());
-                            working.first.addAll(toSort.get(nn).first);
-                            working.first.addAll(toSort.get(nnn).first);
-                            working.second.addAll(toSort.get(nn).second);
-                            working.second.addAll(toSort.get(nnn).second);
+                            continue;
+                        }
+                        for (int nn=0; nn < toSort.size() && nn < 50; nn++)
+                        {
+                            totalcount++;
+                            setProgressString(String.format("Trickling up %d/%d...", totalcount, Math.min(150, (n+1)*50)));
+                            for (int nnn=nn; nnn < toSortMap.get(comparingtolayer).size() && nnn < 50; nnn++)
+                            {
+                                Log.d("7468645845", String.format("Trickling up %d/%d...", nn, nnn));
+                                Pair<HashSet<String>, HashSet<Integer>> working = new Pair<>(new HashSet<>(), new HashSet<>());
+                                working.first.addAll(toSort.get(nn).first);
+                                working.first.addAll(toSortMap.get(comparingtolayer).get(nnn).first);
+                                working.second.addAll(toSort.get(nn).second);
+                                working.second.addAll(toSortMap.get(comparingtolayer).get(nnn).second);
 
-                            if (working.first.size() > length_all)
-                            {
-                                continue;
-                            }
-                            int alc = 0;
-                            int non = 0;
-                            for (String z: working.first)
-                            {
-                                if (s_alc.contains(z))
+                                if (working.first.size() > length_all)
                                 {
-                                    alc++;
+                                    continue;
                                 }
-                                else
+                                int alc = 0;
+                                int non = 0;
+                                for (String z: working.first)
                                 {
-                                    non++;
+                                    if (s_alc.contains(z))
+                                    {
+                                        alc++;
+                                    }
+                                    else
+                                    {
+                                        non++;
+                                    }
                                 }
-                            }
-                            if (alc > length_alc || non > length_non)
-                            {
-                                continue;
-                            }
+                                if (alc > length_alc || non > length_non)
+                                {
+                                    continue;
+                                }
 
-                            potential.putIfAbsent(working.first.size(), new HashMap<>());
-                            if (potential.get(working.first.size()).get(working.first) != null)
-                            {
-                                Log.d("74686458455", "WOW");
+                                potential.putIfAbsent(working.first.size(), new HashMap<>());
+                                if (potential.get(working.first.size()).get(working.first) != null)
+                                {
+                                    Log.d("74686458455", "WOW");
+                                }
+                                potential.get(working.first.size()).putIfAbsent(working.first, new HashSet<>());
+                                potential.get(working.first.size()).get(working.first).addAll(working.second);
+                                // Log.d("74686458455", String.valueOf(potential.get(working.first.size()).get(working.first)));
                             }
-                            potential.get(working.first.size()).putIfAbsent(working.first, new HashSet<>());
-                            potential.get(working.first.size()).get(working.first).addAll(working.second);
-                            // Log.d("74686458455", String.valueOf(potential.get(working.first.size()).get(working.first)));
                         }
                     }
                 }
-
+                setNewPreviousProgress();
             }
             ArrayList<Pair<HashSet<String>, HashSet<Integer>>> finalToSort = toSort;
             runOnUiThread(new Thread(() -> populate(finalToSort)));
