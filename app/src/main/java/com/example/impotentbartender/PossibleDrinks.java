@@ -33,32 +33,38 @@ public class PossibleDrinks {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
+    static ArrayList<Cocktail> getPossibleDrinks(Context context, String[] owned, ArrayList<Cocktail> allCocktails, boolean usesimpllified)
+    {
+        return getPossibleDrinks(context, new HashSet<>(Arrays.asList(owned)), allCocktails, usesimpllified);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     static ArrayList<Cocktail> getPossibleDrinks(Context context, HashSet<String> owned, ArrayList<Cocktail> allCocktails)
+    {
+        return getPossibleDrinks(context, owned, allCocktails, false);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    static ArrayList<Cocktail> getPossibleDrinks(Context context, HashSet<String> owned, ArrayList<Cocktail> allCocktails, boolean usesimpllified)
     {
         ArrayList<Cocktail> keys = new ArrayList<>();
         for (Cocktail cock: allCocktails)
         {
-            HashSet<String> working = (HashSet<String>) cock.ingredientset.clone();
+            HashSet<String> working;
+            if (usesimpllified)
+            {
+                working = (HashSet<String>) cock.simplifiedingredientset.clone();
+            }
+            else
+            {
+                working = (HashSet<String>) cock.ingredientset.clone();
+            }
             working.removeAll(owned);
             if (working.size() == 0)
             {
                 keys.add(cock);
             }
-//            boolean add = true;
-//            for (HashMap<String, String> ing: cock.ingredients)
-//            {
-//                if (JSONArrayPos(owned, ing.get("ingredient"))==-1)
-//                {
-//                    add = false;
-//                    break;
-//                }
-//            }
-//            if (add)
-//            {
-//                keys.add(cock);
-//            }
         }
-        // keys.sort((Cocktail c1, Cocktail c2) -> c1.name.compareTo(c2.name));
         return keys;
     }
 

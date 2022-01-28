@@ -41,6 +41,7 @@ public class PossibleActivity extends AppCompatActivity implements AdapterView.O
     Button btnPageDown;
     ArrayList<Cocktail> shownCocktails;
     JSONObject allCocktails;
+    JSONObject allIngredients;
     Context context;
     JSONObject owned;
 
@@ -55,6 +56,7 @@ public class PossibleActivity extends AppCompatActivity implements AdapterView.O
         context = this;
 
         allCocktails = JsonIO.load(context, R.raw.allcocktails);
+        allIngredients = JsonIO.load(context, R.raw.allingredients);
 
         flPossibleDrinks = findViewById(R.id.flPossibleDrinks);
         etSearch = findViewById(R.id.etSearch);
@@ -81,7 +83,7 @@ public class PossibleActivity extends AppCompatActivity implements AdapterView.O
 
         try
         {
-            shownCocktails = PossibleDrinks.getPossibleDrinks(context, PossibleDrinks.jsonListToStringArray(owned.getJSONArray("list")), Cocktail.getAllCocktails(context));
+            shownCocktails = PossibleDrinks.getPossibleDrinks(context, PossibleDrinks.jsonListToStringArray(owned.getJSONArray("list")), Cocktail.getAllCocktails(context, true), true);
         }
         catch (JSONException e)
         {

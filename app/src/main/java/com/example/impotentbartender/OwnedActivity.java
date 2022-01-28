@@ -65,6 +65,9 @@ public class OwnedActivity extends AppCompatActivity
         Log.d("fuck", owned.toString());
     }
 
+    /**
+     * Creates all the IngredientReps and slaps them into the list.
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     void populate()
     {
@@ -73,9 +76,10 @@ public class OwnedActivity extends AppCompatActivity
         {
             for (String k: keys)
             {
+                // Only do items on the ground level. Everything else is added by their parents.
                 if (allIngredients.getJSONObject(k).getString("variantOf").equals("null"))
                 {
-                    addSingleIng(k, 0);
+                    addSingleIng(k, "");
                 }
             }
         }
@@ -85,26 +89,35 @@ public class OwnedActivity extends AppCompatActivity
         }
     }
 
-    IngredientRep addSingleIng(String k, int layer)
+    /**
+     * Creates a single IngredientRep and slaps it into the list.
+     *
+     * @param  k                    The name of the ingredient.
+     * @param  previousLayerPrefix  the location of the image, relative to the url argument
+     * @return      the image at the specified URL
+     */
+    IngredientRep addSingleIng(String k, String previousLayerPrefix)
     {
         try
         {
             IngredientRep tvItem = new IngredientRep(context, k);
             JSONObject ing = allIngredients.getJSONObject(k);
 
-            tvItem.setText(String.format("%s%s", new String(new char[4*layer]).replace("\0", " "), Aesthetic.ingredientString(ing)));
-            tvItem.setTextSize(30);
+            tvItem.setText(String.format("%s%s", previousLayerPrefix, Aesthetic.ingredientString(ing)));
+            tvItem.setTextSize(20);
 
             llList.addView(tvItem);
             setColor(tvItem);
 
+            // Why does this go through every key instead of just using the variants
             for (String kk: keys)
             {
                 Log.d("hhh", allIngredients.getJSONObject(kk).getString("variantOf"));
                 if (allIngredients.getJSONObject(kk).getString("variantOf").equals(k))
                 {
                     Log.d("hhh", "why");
-                    tvItem.iHide.add(addSingleIng(kk, layer+1));
+                    tvItem.iHide.add(addSingleIng(kk, previousLayerPrefix
+                            + (allIngredients.getJSONObject(kk).getBoolean("blocksDownwardMovement") ? "\uD83D\uDED1" :"➡" )));
                 }
             }
 
@@ -153,6 +166,11 @@ public class OwnedActivity extends AppCompatActivity
         return new IngredientRep(context, "fuck");
     }
 
+    /**
+     * Sets the color of an IngredientRep based on ownership. Should probably be moved into the class.
+     *
+     * @param  tv  The IngredientRep to toggle.
+     */
     void setColor(IngredientRep tv)
     {
         try {

@@ -36,6 +36,7 @@ public class Cocktail
     ArrayList<String> optional;
     ArrayList<HashMap<String, String>> ingredients;
     HashSet<String> ingredientset;
+    HashSet<String> simplifiedingredientset;  // Instead contains non-specific versions of ingredients
     LinearLayout preview;
     int index;
 
@@ -49,7 +50,18 @@ public class Cocktail
         IMissPython(context, index, allCocktails);
     }
 
+    public Cocktail(Context context, int index, JSONArray allCocktails, JSONObject allingredients)
+    {
+        IMissPython(context, index, allCocktails, allingredients);
+    }
+
+
     private void IMissPython(Context context, int index, JSONArray allCocktails)
+    {
+        IMissPython(context, index, allCocktails, null);
+    }
+
+    private void IMissPython(Context context, int index, JSONArray allCocktails, JSONObject allingredients)
     {
         this.context = context;
         try
@@ -72,6 +84,7 @@ public class Cocktail
 
             ingredients = new ArrayList<>();
             ingredientset = new HashSet<>();
+            simplifiedingredientset = new HashSet<>();
             JSONArray ingredientsjson = current.getJSONArray("ingredients");
             for (int i=0; i<ingredientsjson.length(); i++)
             {
@@ -80,8 +93,23 @@ public class Cocktail
                 hm.put("quantity", ingredientsjson.getJSONObject(i).getString("quantity"));
                 hm.put("unit", ingredientsjson.getJSONObject(i).getString("unit"));
                 ingredients.add(hm);
-                ingredientset.add(ingredientsjson.getJSONObject(i).getString("ingredient"));
+                String fullingredient = ingredientsjson.getJSONObject(i).getString("ingredient");
+
+                ingredientset.add(fullingredient);
+
+                if (allingredients != null)
+                {
+                    String simplestingredient = fullingredient;
+                    while (!allingredients.getJSONObject(simplestingredient).getString("variantOf").equals("null"))
+                    {
+
+                        simplestingredient = allingredients.getJSONObject(simplestingredient).getString("variantOf");
+
+                    }
+                    simplifiedingredientset.add(simplestingredient);
+                }
             }
+            Log.d("yeah", simplifiedingredientset.toString());
         }
         catch (JSONException e) {
             Log.d("fuck", "uh");
@@ -183,11 +211,27 @@ public class Cocktail
 
     public static ArrayList<Cocktail> getAllCocktails(Context context)
     {
+        return getAllCocktails(context, false);
+    }
+
+    public static ArrayList<Cocktail> getAllCocktails(Context context, boolean includesimplified)
+    {
         ArrayList<Cocktail> ret = new ArrayList<>();
         JSONArray allCocktails = JsonIO.loadArray(context, R.raw.allcocktails);
-        for (int x = 0; x < allCocktails.length();  x++)
+        if (includesimplified)
         {
-            ret.add(new Cocktail(context, x, allCocktails));
+            JSONObject allIngredients = JsonIO.load(context, R.raw.allingredients);
+            for (int x = 0; x < allCocktails.length();  x++)
+            {
+                ret.add(new Cocktail(context, x, allCocktails, allIngredients));
+            }
+        }
+        else
+        {
+            for (int x = 0; x < allCocktails.length();  x++)
+            {
+                ret.add(new Cocktail(context, x, allCocktails));
+            }
         }
         return ret;
     }
