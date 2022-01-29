@@ -47,6 +47,7 @@ public class PossibleDrinks {
     @RequiresApi(api = Build.VERSION_CODES.N)
     static ArrayList<Cocktail> getPossibleDrinks(Context context, HashSet<String> owned, ArrayList<Cocktail> allCocktails, boolean usesimpllified)
     {
+        // simplifiedingredientset is like. the ingredients reduced to their most basic form
         ArrayList<Cocktail> keys = new ArrayList<>();
         for (Cocktail cock: allCocktails)
         {

@@ -100,12 +100,15 @@ public class Cocktail
                 if (allingredients != null)
                 {
                     String simplestingredient = fullingredient;
-                    while (!allingredients.getJSONObject(simplestingredient).getString("variantOf").equals("null"))
+                    String simplestingredientmaybe = allingredients.getJSONObject(simplestingredient).getString("variantOf");
+                    while (
+                            !allingredients.getJSONObject(simplestingredient).getString("variantOf").equals("null") && // Anything below me?
+                            !allingredients.getJSONObject(simplestingredientmaybe).getBoolean("blocksDownwardMovement") // Can I enter it?
+                    )
                     {
-
-                        simplestingredient = allingredients.getJSONObject(simplestingredient).getString("variantOf");
-
-                    }
+                            simplestingredient = simplestingredientmaybe;
+                            simplestingredientmaybe = allingredients.getJSONObject(simplestingredient).getString("variantOf");
+                    };
                     simplifiedingredientset.add(simplestingredient);
                 }
             }
