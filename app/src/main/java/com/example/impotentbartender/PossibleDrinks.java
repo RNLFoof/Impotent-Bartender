@@ -21,6 +21,21 @@ import java.util.Set;
 
 public class PossibleDrinks {
     @RequiresApi(api = Build.VERSION_CODES.N)
+    static ArrayList<Cocktail> getPossibleDrinks(Context context)
+    {
+        JSONArray owned = null;
+        try
+        {
+            owned = JsonIO.load(context, "owned").getJSONArray("list");
+            return getPossibleDrinks(context, jsonListToStringArray(owned));
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
     static ArrayList<Cocktail> getPossibleDrinks(Context context, String[] owned)
     {
         return getPossibleDrinks(context, owned, Cocktail.getAllCocktails(context));

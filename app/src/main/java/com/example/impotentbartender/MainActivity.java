@@ -18,11 +18,13 @@ public class MainActivity extends AppCompatActivity {
     Button btnPossible;
     Button btnSuggest;
     Button btnRaters;
+    Button btnExport;
 
     Button btnOwnedHelp;
     Button btnJsonListHelp;
     Button btnPossibleHelp;
     Button btnSuggestHelp;
+    Button btnExportHelp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +38,13 @@ public class MainActivity extends AppCompatActivity {
         btnPossible = (Button)findViewById(R.id.btnPossible);
         btnSuggest = (Button)findViewById(R.id.btnSuggest);
         btnRaters = (Button)findViewById(R.id.btnRaters);
+        btnExport = (Button)findViewById(R.id.btnExport);
 
         btnOwnedHelp = (Button)findViewById(R.id.btnOwnedHelp);
         btnJsonListHelp = (Button)findViewById(R.id.btnJsonListHelp);
         btnPossibleHelp = (Button)findViewById(R.id.btnPossibleHelp);
         btnSuggestHelp = (Button)findViewById(R.id.btnSuggestHelp);
+        btnExportHelp = (Button)findViewById(R.id.btnExportHelp);
 
         btnOwned.setOnClickListener(new View.OnClickListener()
         {
@@ -112,6 +116,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnExport.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(context, ExportActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
 
         btnOwnedHelp.setOnClickListener(new View.OnClickListener()
@@ -157,6 +171,18 @@ public class MainActivity extends AppCompatActivity {
             {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setMessage("For if you need to edit the save data directly for some reason. I'm pretty sure whatever text editor you use is gonna need root access. Die");
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
+        btnExportHelp.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("Lets you save your possible recipes as a json file.");
                 AlertDialog dialog = builder.create();
                 dialog.show();
             }

@@ -103,11 +103,21 @@ public class JsonIO {
 
     public static boolean save(Context context, String fileName, String jsonString)
     {
+        try {
+            return save(context, fileName, new JSONObject(jsonString));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean save(Context context, String fileName, JSONObject object)
+    {
         fileName = filenameConvert(fileName);
 
         try {
             JSONObject o = load(context, fileName);
-            JSONObject n = new JSONObject(jsonString);
+            JSONObject n = object;
             Iterator<String> keys = o.keys();
             while (keys.hasNext())
             {

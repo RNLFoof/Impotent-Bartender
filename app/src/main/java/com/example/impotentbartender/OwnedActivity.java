@@ -110,14 +110,15 @@ public class OwnedActivity extends AppCompatActivity
             setColor(tvItem);
 
             // Why does this go through every key instead of just using the variants
-            for (String kk: keys)
+            for (int n=0; n < ing.getJSONArray("variants").length(); n++)
             {
-                Log.d("hhh", allIngredients.getJSONObject(kk).getString("variantOf"));
-                if (allIngredients.getJSONObject(kk).getString("variantOf").equals(k))
+                String childKey = ing.getJSONArray("variants").getString(n);
+                Log.d("hhh", allIngredients.getJSONObject(childKey).getString("variantOf"));
+                if (allIngredients.getJSONObject(childKey).getString("variantOf").equals(k))
                 {
                     Log.d("hhh", "why");
-                    tvItem.iHide.add(addSingleIng(kk, previousLayerPrefix
-                            + (allIngredients.getJSONObject(kk).getBoolean("blocksDownwardMovement") ? "\uD83D\uDED1" :"➡" )));
+                    tvItem.iHide.add(addSingleIng(childKey, previousLayerPrefix
+                            + (allIngredients.getJSONObject(k).getBoolean("blocksDownwardMovement") ? "\uD83D\uDED1" :"➡" )));
                 }
             }
 

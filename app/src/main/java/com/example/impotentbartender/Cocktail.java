@@ -23,9 +23,13 @@ import org.json.JSONObject;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+
+import static com.example.impotentbartender.PossibleDrinks.jsonListToStringArray;
 
 public class Cocktail
 {
@@ -277,5 +281,52 @@ public class Cocktail
             }
         }
         return (matches == searches.length);
+    }
+
+//    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+//    public static String getCocktailJsonString(Context context)
+//    {
+//        try
+//        {
+//            JSONArray ownedjsonarray = JsonIO.load(context, "owned").getJSONArray("list");
+//            String[] ownedarraylist = jsonListToStringArray(ownedjsonarray);
+//
+//            return getCocktailJsonString(context, Arrays.asList(ownedarraylist));
+//        }
+//        catch (JSONException e)
+//        {
+//            e.printStackTrace();
+//            return "";
+//        }
+//    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public static String getCocktailJsonString(Context context)
+    {
+        // Get the JSON string, filtering out Undesirables
+        JSONArray allCocktails = JsonIO.loadArray(context, R.raw.allcocktails);
+        ArrayList<Cocktail> allowedcocktails = getAllCocktails(context);
+        HashSet<String> allowednames = new HashSet<>();
+        for (Cocktail cock: allowedcocktails)
+        {
+            allowednames.add(cock.name);
+        }
+        for (int x = allCocktails.length()-1; x >= 0; x--)
+        {
+            try
+            {
+                JSONObject cocktail = allCocktails.getJSONObject(x);
+                if (!allowednames.contains(cocktail.getString("name")))
+                {
+                    allCocktails.remove(x);
+                }
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        return allCocktails.toString();
     }
 }
